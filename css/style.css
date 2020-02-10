@@ -1,0 +1,134 @@
+:root {
+  --light-color: #f3f3f3;
+  --dark-color: #333;
+  --medium-color: #ccc;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Raleway", "Arial" sans-serif;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.txt {
+  color: var(--medium-color);
+  font-size: 0.8rem;
+}
+
+/* -----MAIN-SECTION----- */
+#main-section {
+  background: url("../img/bg4.jpg") no-repeat center center/cover;
+  height: 100vh;
+}
+
+/* -----CONTAINER----- */
+#main-section .container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+
+/* -----FORM----- */
+#main-section .container .form {
+  background: var(--light-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  margin-right: 3rem;
+  border-radius: 12px;
+}
+
+/* -----FORM AREA----- */
+#main-section .container .form .form-area {
+  padding: 4rem;
+}
+
+/* FORM INPUT TYPES */
+#main-section .container .form .form-area .input-field input[type="email"],
+input[type="password"] {
+  color: var(--dark-color);
+  background: #ccc;
+  text-align: left;
+  margin: 0.6rem 0;
+  padding: 0.6rem 1rem 0.6rem 3.5rem;
+  border: none;
+  border-radius: 25px;
+}
+
+/* FORM SUBMIT BUTTON */
+#main-section .container .form .form-area .input-field button[type="submit"] {
+  color: var(--light-color);
+  background: #002699;
+  text-align: center;
+  margin: 0.6rem;
+  padding: 0.6rem 3rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+#main-section
+  .container
+  .form
+  .form-area
+  .input-field
+  button[type="submit"]:hover {
+  opacity: 0.9;
+}
+
+/* FORM AREA FAVICONS */
+#main-section .container .form .form-area .input-field .fields-i {
+  color: var(--dark-color);
+  position: absolute;
+  padding-top: 1.15rem;
+  padding-left: 2rem;
+}
+
+/* FORM AREA HELP FIELD */
+#main-section .container .form .form-area .help-field {
+  padding: 1rem 0;
+}
+#main-section .container .form .form-area .help-field .txt:hover {
+  color: #002699;
+}
+
+/* SOCIAL FIELD */
+#main-section .container .form .form-area .social {
+  justify-self: center;
+}
+#main-section .container .form .form-area .social i {
+  margin: 0.4rem;
+}
+#main-section .container .form .form-area .social i:hover {
+  opacity: 0.8;
+}
+#main-section .container .form .form-area .social .fa-facebook {
+  color: #3b5998;
+}
+#main-section .container .form .form-area .social .fa-google {
+  color: #fbbc05;
+}
+#main-section .container .form .form-area .social .fa-linkedin {
+  color: #0e76a8;
+}
+
+/* -----FORM-INFO----- */
+#main-section .container .form .form-info {
+  background: #002699;
+  color: var(--light-color);
+  display: flex;
+  height: 400px;
+  align-items: center;
+  padding: 4rem;
+}

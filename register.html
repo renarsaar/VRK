@@ -32,23 +32,70 @@
           </div>
           <div class="form-area">
             <!-- REGISTER -->
-            <form action="process.php" method="get">
+            <form action="register.php" method="POST">
               <h2>Register a New User</h2>
               <div class="input-field">
+                <i class="fas fa-user fields-i"></i>
+                <label for="username">
+                  <input
+                    type="text"
+                    name="u_name"
+                    id="username"
+                    placeholder="Enter Your Username"
+                  />
+                </label>
+              </div>
+              <div class="input-field">
+                <i class="fas fa-info fields-i"></i>
+                <label for="firstname">
+                  <input
+                    type="text"
+                    name="f_name"
+                    id="firstname"
+                    placeholder="Enter Your Firstname"
+                  />
+                </label>
+              </div>
+              <div class="input-field">
+                <i class="fas fa-info fields-i"></i>
+                <label for="lastname">
+                  <input
+                    type="text"
+                    name="l_name"
+                    id="lastname"
+                    placeholder="Enter Your Lastname"
+                  />
+                </label>
+              </div>
+              <div class="input-field">
                 <i class="fas fa-envelope fields-i"></i>
-                <input type="email" id="email" placeholder="Enter Email" />
+                <label for="email">
+                  <input
+                    type="email"
+                    name="e_mail"
+                    id="email"
+                    placeholder="Enter Your Email"
+                  />
+                </label>
               </div>
               <div class="input-field">
                 <i class="fas fa-lock fields-i"></i>
-                <input type="password" id="password" placeholder="**********" />
+                <label for="password">
+                  <input
+                    type="password"
+                    name="p_word"
+                    id="password"
+                    placeholder="Choose a Password"
+                  />
+                </label>
               </div>
               <div class="input-field">
                 <button type="submit">Register a New User</button>
               </div>
-              <div class="help-field">
-                <a href="index.html"><p class="txt">Login Page</p></a>
-              </div>
             </form>
+            <div class="help-field">
+              <a href="index.html"><p class="txt">Login Page</p></a>
+            </div>
           </div>
         </div>
       </div>

@@ -1,8 +1,37 @@
 <?php
+
+$msg = "";
+$msgClass = "";
+# Login Data Check
+if (filter_has_var(INPUT_POST, "submit")) {
+  # Get Form Data, Remove special chars
+  $first_name = htmlspecialchars(ucwords($_POST["f_name"]));
+  $last_name = htmlspecialchars(ucwords($_POST["l_name"]));
+  $email = htmlspecialchars($_POST["email"]);
+  $passw = $_POST["p_word"];
+
+  if (!empty($user_name) && !empty($first_name) && !empty($last_name) && !empty($email)) {
+    # If all data filled, check email
+    if(filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+      # Email check failed
+      $msg = "Please enter a valid Email!";
+      $msgClass = "alert-danger";
+    } else {
+      $msg = "Registration Complete!";
+      $msgClass = "alert-success";      
+    }    
+     // ELSE IF ALL DATA IS OK, register
+  } else {
+    # Failed
+    $msg = "Please fill in all fields!";
+    $msgClass = "alert-danger";
+  } 
+}
+
 if (isset($_POST["submit"])) {
   session_start();
-  $_SESSION["first_name"] = htmlentities(ucwords($_POST["f_name"]));
-  $_SESSION["last_name"] = htmlentities(ucwords($_POST["l_name"]));
+  $_SESSION["f_name"] = htmlentities(ucwords($_POST["f_name"]));
+  $_SESSION["l_name"] = htmlentities(ucwords($_POST["l_name"]));
   $_SESSION["email"] = htmlentities($_POST["email"]);
   $_SESSION["pword"] = ($_POST["p_word"]);
 }

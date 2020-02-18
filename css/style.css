@@ -2,6 +2,7 @@
   --light-color: #f3f3f3;
   --dark-color: #333;
   --medium-color: #ccc;
+  --blue-color: #002699;
 }
 
 * {
@@ -13,6 +14,10 @@ body {
   font-family: "Raleway", "Arial" sans-serif;
   line-height: 1.6;
   box-sizing: border-box;
+}
+
+li {
+  list-style: none;
 }
 
 a {
@@ -132,4 +137,29 @@ input[type="text"] {
   height: 430px;
   align-items: center;
   padding: 4rem;
+}
+
+/* ---------------------HOME PAGE--------------------- */
+.home-container {
+  background: url("../img/bg4.jpg") no-repeat fixed center/cover;
+}
+
+.home-container .header {
+  display: flex;
+  background-color: var(--medium-color);
+  color: var(--dark-color);
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.home-container .header .header-logo {
+  /* width: ;
+  height: ; */
+}
+
+.home-container .header .header-menu ul li {
+  display: inline;
+  margin: 0 0.6rem;
 }

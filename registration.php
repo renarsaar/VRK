@@ -1,43 +1,68 @@
 <?php
-include "inc/sessions.php";
+include "inc/config.php";
 
 $msg = "";
 $msgClass = "";
-# Login Data Check
-if (filter_has_var(INPUT_POST, "submit")) {
-  # Get Form Data, Remove special chars
-  $first_name = htmlspecialchars(ucwords($_POST["f_name"]));
-  $last_name = htmlspecialchars(ucwords($_POST["l_name"]));
+
+# Register a new User
+if(isset($_POST["submit"])) {
+  $first_name = htmlspecialchars(ucwords($_POST["first_name"]));
+  $last_name = htmlspecialchars(ucwords($_POST["last_name"]));
   $email = htmlspecialchars($_POST["email"]);
-  $passw = $_POST["p_word"];
+  $pword = htmlspecialchars($_POST["pword"]);
+  $confirm_pword = htmlspecialchars($_POST["confirm_pword"]);
+  
+  $isValid = true;
 
-  if (!empty($user_name) && !empty($first_name) && !empty($last_name) && !empty($email)) {
-    # If all data filled, check email
-    if(filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-      # Email check failed
-      $msg = "Please enter a valid Email!";
+  # Check IF fields are empty
+    if ($first_name == "" || $last_name == "" || $email == "" || $pword == "" || $confirm_pword == "") {
+      $isValid = false;
       $msgClass = "alert-danger";
-    } else {
-      $msg = "Registration Complete!";
-      $msgClass = "alert-success";      
-    }    
-     // ELSE IF ALL DATA IS OK, register
-  } else {
-    # Failed
-    $msg = "Please fill in all fields!";
-    $msgClass = "alert-danger";
-  } 
+      $msg = "Please enter all fields!";
+    }
+    
+  # Check IF pword matches confirm_pword 
+    if ($isValid && ($pword != $confirm_pword))  {
+      $isValid = false;
+      $msgClass = "alert-danger";
+      $msg = "Passwords are not matching!";
+    }
+
+  # Check IF email is valid
+    if ($isValid && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $isValid = false;
+      $msgClass = "alert-danger";
+      $msg = "Please enter a valid E-mail address";
+    }
+
+  # isValid = True = Check IF email already exists
+    # stmt = prepared statement
+    if ($isValid) {
+      $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+      # "s" = ?
+      $stmt -> bind_param("s", $email);
+      $stmt -> execute();
+      $result = $stmt -> get_result();
+      $stmt -> close();
+      if($result -> num_rows > 0) {
+        $isValid = false;
+        $msgClass = "alert-danger";
+        $msg = "Email is already taken";
+      }
+    }
+
+  # isValid = True = Insert Records
+    if ($isValid) {
+      $insertSQL = "INSERT INTO users(first_name, last_name, email, pword) VALUES (?,?,?,?)";
+      $stmt = $conn -> prepare($insertSQL);
+      $stmt -> bind_param("ssss", $first_name, $last_name, $email, $pword);
+      $stmt -> execute();
+      $stmt -> close();
+
+      $msgClass = "alert-success";
+      $msg = "Account created!<br> You may now log in using your E-mail address";
+    }
 }
-
-if (isset($_POST["submit"])) {
-  session_start();
-  $_SESSION["f_name"] = htmlentities(ucwords($_POST["f_name"]));
-  $_SESSION["l_name"] = htmlentities(ucwords($_POST["l_name"]));
-  $_SESSION["email"] = htmlentities($_POST["email"]);
-  $_SESSION["pword"] = ($_POST["p_word"]);
-}
-
-
 
 ?>
 <!DOCTYPE html>
@@ -60,7 +85,7 @@ if (isset($_POST["submit"])) {
       src="https://kit.fontawesome.com/83a1148b27.js"
       crossorigin="anonymous"
     ></script>
-    <title>VRK Siseveeb | Logi Sisse</title>
+    <title>VRK Intranet | Log In</title>
   </head>
   <body>
     <!-- MAIN -->
@@ -70,36 +95,37 @@ if (isset($_POST["submit"])) {
         <!-- FORM DIV -->
         <div class="form">
           <div class="form-info">
-            <h2>VRK SISEVEEB</h2>
+            <h2>VRK Intranet</h2>
           </div>
+
           <div class="form-area">
-            <!-- ERROR MESSAGE -->
+            <!-- ERROR/SUCCESS MESSAGE -->
             <?php if($msg != "") :?>
               <div class="<?php echo $msgClass; ?>"><?php echo $msg; ?></div>
             <?php endif; ?>
 
             <!-- REGISTER -->
-            <form method="post" action="<?php echo($_SERVER["PHP_SELF"]); ?>" >
+            <form method="post" action="">
               <h2>Register a New User</h2>
               <div class="input-field">
                 <i class="fas fa-info fields-i"></i>
-                <label for="firstname">
+                <label for="first_name">
                   <input
                     type="text"
-                    name="f_name"
+                    name="first_name"
                     placeholder="Enter Your Firstname"
-                    value="<?php echo isset($_POST["f_name"]) ? $first_name : "" ?>"
+                    value="<?php echo isset($_POST["first_name"]) ? $first_name : "" ?>"
                   />
                 </label>
               </div>
               <div class="input-field">
                 <i class="fas fa-info fields-i"></i>
-                <label for="lastname">
+                <label for="last_name">
                   <input
                     type="text"
-                    name="l_name"
+                    name="last_name"
                     placeholder="Enter Your Lastname"
-                    value="<?php echo isset($_POST["l_name"]) ? $last_name : "" ?>"
+                    value="<?php echo isset($_POST["last_name"]) ? $last_name : "" ?>"
                   />
                 </label>
               </div>
@@ -116,12 +142,23 @@ if (isset($_POST["submit"])) {
               </div>
               <div class="input-field">
                 <i class="fas fa-lock fields-i"></i>
-                <label for="password">
+                <label for="pword">
                   <input
                     type="password"
-                    name="p_word"
+                    name="pword"
                     id="password"
                     placeholder="Choose a Password"
+                  />
+                </label>
+              </div>
+              <div class="input-field">
+                <i class="fas fa-lock fields-i"></i>
+                <label for="confirm_pword">
+                  <input
+                    type="password"
+                    name="confirm_pword"
+                    id="confirm_pword"
+                    placeholder="Confirm your Password"
                   />
                 </label>
               </div>
@@ -130,7 +167,7 @@ if (isset($_POST["submit"])) {
               </div>
             </form>
             <div class="help-field">
-              <a href="index.php"><p class="txt">Login Page</p></a>
+              <a href="login.php"><p class="txt">Login Page</p></a>
             </div>
           </div>
         </div>

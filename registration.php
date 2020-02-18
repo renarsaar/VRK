@@ -1,4 +1,5 @@
 <?php
+include "inc/sessions.php";
 
 $msg = "";
 $msgClass = "";

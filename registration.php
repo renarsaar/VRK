@@ -1,5 +1,5 @@
 <?php
-include "inc/config.php";
+require "inc/config.php";
 
 $msg = "";
 $msgClass = "";
@@ -15,7 +15,7 @@ if(isset($_POST["submit"])) {
   $isValid = true;
 
   # Check IF fields are empty
-    if ($first_name == "" || $last_name == "" || $email == "" || $pword == "" || $confirm_pword == "") {
+    if (empty($first_name) || empty($last_name) || empty($email) || empty($pword) || empty($confirm_pword)) {
       $isValid = false;
       $msgClass = "alert-danger";
       $msg = "Please enter all fields!";
@@ -39,11 +39,11 @@ if(isset($_POST["submit"])) {
     # stmt = prepared statement
     if ($isValid) {
       $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-      # "s" = ?
       $stmt -> bind_param("s", $email);
       $stmt -> execute();
       $result = $stmt -> get_result();
       $stmt -> close();
+      # If any rows exists = means that there are the same emails
       if($result -> num_rows > 0) {
         $isValid = false;
         $msgClass = "alert-danger";
@@ -53,8 +53,9 @@ if(isset($_POST["submit"])) {
 
   # isValid = True = Insert Records
     if ($isValid) {
-      $insertSQL = "INSERT INTO users(first_name, last_name, email, pword) VALUES (?,?,?,?)";
+      $insertSQL = "INSERT INTO users(first_name, last_name, email, pword) VALUES (?, ?, ?, ?)";
       $stmt = $conn -> prepare($insertSQL);
+    # "s" = corresponding variable has type string
       $stmt -> bind_param("ssss", $first_name, $last_name, $email, $pword);
       $stmt -> execute();
       $stmt -> close();
@@ -65,29 +66,8 @@ if(isset($_POST["submit"])) {
 }
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <meta name="author" content="Renar Saaremets, Kristjan Lehtla" />
-    <meta
-      name="description"
-      content="VRK Siseveeb | Logi Sisse | Registreeru"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Raleway&display=swap"
-      rel="stylesheet"
-    />
-    <script
-      src="https://kit.fontawesome.com/83a1148b27.js"
-      crossorigin="anonymous"
-    ></script>
-    <title>VRK Intranet | Log In</title>
-  </head>
-  <body>
+<?php include("inc/header.php"); ?>
+
     <!-- MAIN -->
     <section id="main-section">
       <!-- CONTAINER -->
@@ -173,5 +153,5 @@ if(isset($_POST["submit"])) {
         </div>
       </div>
     </section>
-  </body>
-</html>
+
+<?php include("inc/footer.php"); ?>

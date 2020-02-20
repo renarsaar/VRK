@@ -1,32 +1,22 @@
 <?php
-include("inc/sessions.php");
-session_start();
+# Log In with a registered user
+require "inc/config.php";
 
-# ...
+# If Submit login form
+if (isset($_POST["submit"])) {
+
+  # Get data from database
+  $email = mysqli_real_escape_string($conn, $_POST["email"]);
+  $pword = mysqli_real_escape_string($conn, $_POST["pword"]);
+
+  # Check if they match
+
+
+}
+
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <meta name="author" content="Renar Saaremets, Kristjan Lehtla" />
-    <meta
-      name="description"
-      content="VRK Siseveeb | Logi Sisse | Registreeru"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Raleway&display=swap"
-      rel="stylesheet"
-    />
-    <script
-      src="https://kit.fontawesome.com/83a1148b27.js"
-      crossorigin="anonymous"
-    ></script>
-    <title>VRK Siseveeb | Logi Sisse</title>
-  </head>
-  <body>
+<?php include("inc/header.php"); ?>
     <!-- MAIN -->
     <section id="main-section">
       <!-- FLEX CONTAINER -->
@@ -50,7 +40,7 @@ session_start();
               </div>
               <div class="help-field">
                 <a href="#"><p class="txt">Forgot Username/Password?</p></a>
-                <a href="register.php"><p class="txt">Create a New User</p></a>
+                <a href="registration.php"><p class="txt">Create a New User</p></a>
               </div>
               <div class="social">
                 <h4>Or Log In With</h4>
@@ -66,9 +56,8 @@ session_start();
               </div>
             </form>
           </div>
-          <div class="form-info"><h2>VRK SISEVEEB</h2></div>
+          <div class="form-info"><h2>VRK Intranet</h2></div>
         </div>
       </div>
     </section>
-  </body>
-</html>
+  <?php include("inc/footer.php"); ?>

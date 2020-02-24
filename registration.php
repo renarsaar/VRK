@@ -6,8 +6,7 @@ $msgClass = "";
 
 # Register a new User
 if(isset($_POST["submit"])) {
-  $first_name = htmlspecialchars(ucwords($_POST["first_name"]));
-  $last_name = htmlspecialchars(ucwords($_POST["last_name"]));
+  $username = htmlspecialchars(ucwords($_POST["username"]));
   $email = htmlspecialchars($_POST["email"]);
   $pword = htmlspecialchars($_POST["pword"]);
   $confirm_pword = htmlspecialchars($_POST["confirm_pword"]);
@@ -15,7 +14,7 @@ if(isset($_POST["submit"])) {
   $isValid = true;
 
   # Check IF fields are empty
-    if (empty($first_name) || empty($last_name) || empty($email) || empty($pword) || empty($confirm_pword)) {
+    if (empty($username) || empty($email) || empty($pword) || empty($confirm_pword)) {
       $isValid = false;
       $msgClass = "alert-danger";
       $msg = "Please enter all fields!";
@@ -53,16 +52,18 @@ if(isset($_POST["submit"])) {
 
   # isValid = True = Insert Records
     if ($isValid) {
-      $insertSQL = "INSERT INTO users(first_name, last_name, email, pword) VALUES (?, ?, ?, ?)";
+      $insertSQL = "INSERT INTO users(username, email, pword) VALUES (?, ?, ?, ?)";
       $stmt = $conn -> prepare($insertSQL);
     # "s" = corresponding variable has type string
-      $stmt -> bind_param("ssss", $first_name, $last_name, $email, $pword);
+      $stmt -> bind_param("sss", $username, $email, $pword);
       $stmt -> execute();
       $stmt -> close();
 
       $msgClass = "alert-success";
       $msg = "Account created!<br> You may now log in using your E-mail address";
     }
+
+    
 }
 
 ?>
@@ -89,23 +90,12 @@ if(isset($_POST["submit"])) {
               <h2>Register a New User</h2>
               <div class="input-field">
                 <i class="fas fa-info fields-i"></i>
-                <label for="first_name">
+                <label for="username">
                   <input
                     type="text"
-                    name="first_name"
-                    placeholder="Enter Your Firstname"
-                    value="<?php echo isset($_POST["first_name"]) ? $first_name : "" ?>"
-                  />
-                </label>
-              </div>
-              <div class="input-field">
-                <i class="fas fa-info fields-i"></i>
-                <label for="last_name">
-                  <input
-                    type="text"
-                    name="last_name"
-                    placeholder="Enter Your Lastname"
-                    value="<?php echo isset($_POST["last_name"]) ? $last_name : "" ?>"
+                    name="username"
+                    placeholder="Enter Your Username"
+                    value="<?php echo isset($_POST["username"]) ? $username : ""; ?>"
                   />
                 </label>
               </div>
@@ -116,7 +106,7 @@ if(isset($_POST["submit"])) {
                     type="email"
                     name="email"
                     placeholder="Enter Your Email"
-                    value="<?php echo isset($_POST["email"]) ? $email : "" ?>"
+                    value="<?php echo isset($_POST["email"]) ? $email : ""; ?>"
                   />
                 </label>
               </div>

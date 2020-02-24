@@ -29,14 +29,14 @@ if (isset($_POST["submit"])) {
               <h2>Please Log In</h2>
               <div class="input-field">
                 <i class="fas fa-envelope fields-i"></i>
-                <input type="email" id="email" placeholder="Enter Email" value="<?php echo isset($_POST["email"]) ? $email : "" ?>"/>
+                <input type="email" id="email" placeholder="Enter Email" value="<?php echo isset($_POST["email"]) ? $email : ""; ?>"/>
               </div>
               <div class="input-field">
                 <i class="fas fa-lock fields-i"></i>
                 <input type="password" id="password" placeholder="**********" />
               </div>
               <div class="input-field">
-                <button type="submit">Log in</button>
+                <button type="submit" action="">Log in</button>
               </div>
               <div class="help-field">
                 <a href="#"><p class="txt">Forgot Username/Password?</p></a>

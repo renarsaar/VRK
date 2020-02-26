@@ -1,7 +1,7 @@
 <?php
 
 # Information about MySQL Database configuration
-   session_start();
+   
    $host = "localhost"; 
    $user = "root"; 
    $password = "Qwerty123"; 

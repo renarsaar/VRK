@@ -12,18 +12,7 @@ require "inc/config.php";
   # Fetch data to associative array
   $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    # Create Query = EVENTS
-    $sql2 = "SELECT * FROM events";
-
-    # Get the result
-    $result2 = $conn -> query($sql2);
-
-    # Fetch data to associative array
-    $events = mysqli_fetch_all($result2, MYSQLI_ASSOC);
-
-    # Close Connection
-    $conn -> close();
-
+    require "inc/event-query.php";
 ?>
 
 <?php include("inc/home-header.php"); ?>
@@ -34,7 +23,7 @@ require "inc/config.php";
         <div class="home-posts">
           <!-- Foreach loop -->
           <?php foreach($posts as $post) : ?>
-            <div class="post">
+            <div class="post-event">
               <h2><?php echo $post["title"]; ?></h2>
               <h5>Created At: <?php echo $post["created_at"]; ?> By: <?php echo $post["author"]; ?></h5>
               <p class="txt-home">
@@ -50,7 +39,7 @@ require "inc/config.php";
             <div class="event">
               <h2><?php echo $event["title"]; ?></h2>
               <h5>Event At: <?php echo $event["event_at"]; ?></h5>
-              <p class="txt-home"><?php echo $event["desc"]; ?></p>
+              <p class="txt-home"><?php echo $event["descr"]; ?></p>
               <a class="btn" href="event.php?id=<?php echo $event["id"]; ?>">View more</a>
             </div>
           <?php endforeach; ?>

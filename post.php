@@ -6,7 +6,7 @@ if (isset($_POST["delete"])) {
   # Get form data
   $delete_id = mysqli_real_escape_string($conn, $_POST["delete_id"]);
 
-  # Delete = delete_id (line 48)
+  # Delete = delete_id (line 62)
   $query = "DELETE FROM posts WHERE id = {$delete_id};";
 
   if (mysqli_query($conn, $query)) {
@@ -30,27 +30,14 @@ if (isset($_POST["delete"])) {
   # Fetch data to associative array
   $post = mysqli_fetch_assoc($result3);
 
-
-    # Create Query = EVENTS
-    $sql2 = "SELECT * FROM events";
-
-    # Get the result
-    $result2 = $conn -> query($sql2);
-
-    # Fetch data to associative array
-    $events = mysqli_fetch_all($result2, MYSQLI_ASSOC);
-
-    # Close Connection
-    $conn -> close();
-
-
+    require "inc/event-query.php"; 
 ?>
 <?php include("inc/home-header.php"); ?>
 <?php include("inc/navbar.php"); ?>
 
       <div class="home-content">
         <div class="home-posts">
-          <div class="post">
+          <div class="post-event">
             <h2><?php echo $post["title"]; ?></h2>
             <h5>Created At: <?php echo $post["created_at"]; ?> By: <?php echo $post["author"]; ?></h5>
             <p class="txt-home">
@@ -62,8 +49,8 @@ if (isset($_POST["delete"])) {
             <!-- Hidden id shows this post ID -->
             <input type="hidden" name="delete_id" value="<?php echo $post["id"]; ?>">
               <div class="edit-form">
-                  <input type="submit" name="delete" value="Delete" class="btn alert-danger">
                   <a href="editpost.php?id=<?php echo $post["id"]; ?>" class="btn">Edit Post</a>
+                  <input type="submit" name="delete" value="Delete" class="btn-alert">
               </div>
             </form>
           </div>
@@ -74,7 +61,7 @@ if (isset($_POST["delete"])) {
             <div class="event">
               <h2><?php echo $event["title"]; ?></h2>
               <h5>Event At: <?php echo $event["event_at"]; ?></h5>
-              <p class="txt-home"><?php echo $event["desc"]; ?></p>
+              <p class="txt-home"><?php echo $event["descr"]; ?></p>
               <a class="btn" href="event.php?id=<?php echo $event["id"]; ?>">View more</a>
             </div>
           <?php endforeach; ?>

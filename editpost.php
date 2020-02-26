@@ -18,79 +18,65 @@ if (isset($_POST["submit"])) {
   }
 }
 
-// die($query); to dispaly error
-    # Get ID
-    $id = mysqli_real_escape_string($conn, $_GET["id"]);
-
-    # Create query
-    $query = "SELECT * FROM posts WHERE id = $id";
-  
-    # Get the result
-    $result = mysqli_query($conn, $query);
-  
-    # Fetch data
-    # ASSOCIATIVE ARRAY = ["name" => "renar"]
-    $post = mysqli_fetch_assoc($result);
-  
-    # Free result
-    mysqli_free_result($result);
-  
-    # Close connection
-    mysqli_close($conn);
-
-# BOTTOM ONE NEED TO CORRESPOND TOP ONE
-
-
-
-
-
-
-
   # Using OOP
-
+  # Get ID
   $id = mysqli_real_escape_string($conn, $_GET["id"]);
 
   # Create Query = SINLGE POST
-  $sql3 = "SELECT * FROM posts WHERE id = $id";
+  $sql = "SELECT * FROM posts WHERE id = $id";
 
   # Get the result
-  $result3 = $conn -> query($sql3);
+  $result = $conn -> query($sql);
 
   # Fetch data to associative array
-  $post = mysqli_fetch_assoc($result3);
+  $post = mysqli_fetch_assoc($result);
 
-
-    # Create Query = EVENTS
-    $sql2 = "SELECT * FROM events";
-
-    # Get the result
-    $result2 = $conn -> query($sql2);
-
-    # Fetch data to associative array
-    $events = mysqli_fetch_all($result2, MYSQLI_ASSOC);
-
-    # Close Connection
-    $conn -> close();
-
-
+    require "inc/event-query.php"; 
 ?>
 <?php include("inc/home-header.php"); ?>
 <?php include("inc/navbar.php"); ?>
 
       <div class="home-content">
         <div class="home-posts">
-          <div class="post">
-            <h2>Edit post</h2>
-            <!-- form to edit -->
-            <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" class="">
-            
-           
 
-            
-            
+            <!-- form to edit -->
+          <div class="form">
+            <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" class="">
+              <h2>Edit post</h2>
+              <!-- Input fields -->
+              <div class="input-field">
+                <h4>Title</h4>
+                <label for="title">
+                  <input
+                    type="text"
+                    name="title"
+                    value="<?php echo $post["title"]; ?>"
+                  />
+                </label>
+              </div>
+              <div class="input-field">
+                <h4>Author</h4>
+                <label for="postauthor">
+                  <input
+                    type="text"
+                    name="author"
+                    value="<?php echo $post["author"]; ?>"
+                  />
+                </label>
+              </div>
+              <div class="input-field">
+                <h4>Post</h4>
+                <label for="body">
+                  <textarea 
+                  name="body"
+                  rows="7"
+                  cols="60"><?php echo $post["body"]; ?></textarea>
+                </label>
+              </div>
+
             <!-- Hidden id shows this post ID -->
-            <input type="hidden" name="delete_id" value="<?php echo $post["id"]; ?>">
-            <input type="submit" name="submit" value="Edit" class="btn">
+              <input type="hidden" name="update_id" value="<?php echo $post["id"]; ?>">
+              <input type="submit" name="submit" value="Edit post" class="btn-success">
             </form>
           </div>
         </div>
@@ -100,7 +86,7 @@ if (isset($_POST["submit"])) {
             <div class="event">
               <h2><?php echo $event["title"]; ?></h2>
               <h5>Event At: <?php echo $event["event_at"]; ?></h5>
-              <p class="txt-home"><?php echo $event["desc"]; ?></p>
+              <p class="txt-home"><?php echo $event["descr"]; ?></p>
               <a class="btn" href="event.php?id=<?php echo $event["id"]; ?>">View more</a>
             </div>
           <?php endforeach; ?>

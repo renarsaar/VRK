@@ -160,7 +160,7 @@ input[type="text"] {
 
 /* FORM AREA HELP FIELD */
 #main-section .container .form .form-area .help-field {
-  padding: 0.6rem 0;
+  padding: 0.4rem 0;
 }
 #main-section .container .form .form-area .help-field .txt:hover {
   color: var(--blue-color);
@@ -191,7 +191,7 @@ input[type="text"] {
   background: var(--blue-color);
   color: var(--light-color);
   display: flex;
-  height: 550px;
+  height: 100vh;
   align-items: center;
   padding: 2rem 3rem;
 }
@@ -199,7 +199,7 @@ input[type="text"] {
 /* ---------------------HOME PAGE--------------------- */
 #home-page {
   background: url("../img/bg4.jpg") no-repeat fixed center/cover;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .home-container {
@@ -349,4 +349,13 @@ textarea {
   padding: 0.6rem 1rem 0.6rem 3.5rem;
   border: none;
   border-radius: 25px;
+}
+
+.home-container .home-content .home-posts .form h2 {
+  margin: 1rem 0;
+}
+
+.home-container .home-content .home-posts .home-members {
+  padding: 2rem;
+  width: 60%;
 }

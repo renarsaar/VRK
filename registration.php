@@ -6,6 +6,8 @@ $msgClass = "";
 
 # Register a new User
 if(isset($_POST["submit"])) {
+  $firstname = htmlspecialchars(ucwords($_POST["firstname"]));
+  $lastname = htmlspecialchars(ucwords($_POST["lastname"]));
   $username = htmlspecialchars($_POST["username"]);
   $email = htmlspecialchars($_POST["email"]);
   $pword = htmlspecialchars($_POST["pword"]);
@@ -15,17 +17,17 @@ if(isset($_POST["submit"])) {
   $isValid = true;
 
   # Check IF fields are empty
-    if (empty($username) || empty($email) || empty($pword) || empty($confirm_pword)) {
+    if (empty($firstname) || empty($lastname) || empty($username) || empty($email) || empty($pword) || empty($confirm_pword)) {
       $isValid = false;
       $msgClass = "alert-danger";
       $msg = "Please enter all fields!";
+  # Password atleast 6 characters
     } elseif (strlen($pword) < 6) {
-      # Password atleast 6 characters
       $isValid = false;
       $msgClass = "alert-danger";
       $msg = "Password must be atleast 6 characters";
     }
-    
+
   # Check IF pword matches confirm_pword 
     if ($isValid && ($pword != $confirm_pword))  {
       $isValid = false;
@@ -41,13 +43,13 @@ if(isset($_POST["submit"])) {
     }
 
   # isValid = True = Check IF email already exists
-    # stmt = prepared statement
+    # sql = prepared sql statement
     if ($isValid) {
-      $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-      $stmt -> bind_param("s", $email);
-      $stmt -> execute();
-      $result = $stmt -> get_result();
-      $stmt -> close();
+      $sql = $conn -> prepare("SELECT * FROM users WHERE email = ?");
+      $sql -> bind_param("s", $email);
+      $sql -> execute();
+      $result = $sql -> get_result();
+      $sql -> close();
       # If any rows exists = means that there are the same emails
       if($result -> num_rows > 0) {
         $isValid = false;
@@ -59,21 +61,19 @@ if(isset($_POST["submit"])) {
     
   # isValid = True = Insert Records
     if ($isValid) {
-      $insertSQL = "INSERT INTO users(username, email, pword) VALUES (?, ?, ?)";
-      $stmt = $conn -> prepare($insertSQL);
+      $insertSQL = "INSERT INTO users(firstname, lastname, username, email, pword) VALUES (?, ?, ?, ?, ?)";
+      $sql = $conn -> prepare($insertSQL);
     # "s" = corresponding variable has type string
-      $stmt -> bind_param("sss", $username, $email, $pword);
-      $stmt -> execute();
-      $stmt -> close();
+      $sql -> bind_param("sssss", $firstname, $lastname, $username, $email, $pword);
+      $sql -> execute();
+      $sql -> close();
 
       $msgClass = "alert-success";
       $msg = "Account created!<br> You may now log in using your E-mail address";
     }
-
-    
 }
-
 ?>
+
 <?php include("inc/header.php"); ?>
 
     <!-- MAIN -->
@@ -95,6 +95,28 @@ if(isset($_POST["submit"])) {
             <!-- REGISTER -->
             <form method="post" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
               <h2>Register a New User</h2>
+              <div class="input-field">
+                <i class="fas fa-info fields-i"></i>
+                <label for="firstname">
+                  <input
+                    type="text"
+                    name="firstname"
+                    placeholder="Enter Your First name"
+                    value="<?php echo isset($_POST["firstname"]) ? $firstname : ""; ?>"
+                  />
+                </label>
+              </div>
+              <div class="input-field">
+                <i class="fas fa-info fields-i"></i>
+                <label for="lastname">
+                  <input
+                    type="text"
+                    name="lastname"
+                    placeholder="Enter Your Last name"
+                    value="<?php echo isset($_POST["lastname"]) ? $lastname : ""; ?>"
+                  />
+                </label>
+              </div>
               <div class="input-field">
                 <i class="fas fa-info fields-i"></i>
                 <label for="username">

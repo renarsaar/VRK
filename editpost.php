@@ -4,23 +4,24 @@ require "inc/config.php";
 # Check for submit
 if (isset($_POST["submit"])) {
   # Get form data
-  $update_id = mysqli_real_escape_string($conn, $_POST["update_id"]);
-  $title = mysqli_real_escape_string($conn, $_POST["title"]);
-  $body = mysqli_real_escape_string($conn, $_POST["body"]);
-  $author = mysqli_real_escape_string($conn, $_POST["author"]);
+  $update_id = $conn -> real_escape_string(htmlspecialchars($_POST["update_id"]));
+  $title = $conn -> real_escape_string(htmlspecialchars($_POST["title"]));
+  $body = $conn -> real_escape_string(htmlspecialchars($_POST["body"]));
+  $author = $conn -> real_escape_string(htmlspecialchars($_POST["author"]));
 
-  $query = "UPDATE posts SET title='$title', body='$body', author='$author' WHERE id = '{$update_id}' ";
+  # Create query
+  $sql = "UPDATE posts SET title='$title', body='$body', author='$author' WHERE id = '$update_id' ";
 
-  if (mysqli_query($conn, $query)) {
+  # Redirect to home page if query successfull
+  if ($conn -> query($sql)) {
     header ("Location: home.php");
   } else {
     echo "ERROR: ".mysqli_error($conn);
   }
 }
 
-  # Using OOP
   # Get ID
-  $id = mysqli_real_escape_string($conn, $_GET["id"]);
+  $id = $conn -> real_escape_string($_GET["id"]);
 
   # Create Query = SINLGE POST
   $sql = "SELECT * FROM posts WHERE id = $id";
@@ -29,7 +30,7 @@ if (isset($_POST["submit"])) {
   $result = $conn -> query($sql);
 
   # Fetch data to associative array
-  $post = mysqli_fetch_assoc($result);
+  $post = $result -> fetch_assoc();
 
     require "inc/event-query.php"; 
 ?>
@@ -39,11 +40,9 @@ if (isset($_POST["submit"])) {
       <div class="home-content">
         <div class="home-posts">
 
-            <!-- form to edit -->
           <div class="form">
             <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" class="">
               <h2>Edit post</h2>
-              <!-- Input fields -->
               <div class="input-field">
                 <h4>Title</h4>
                 <label for="title">
@@ -82,7 +81,7 @@ if (isset($_POST["submit"])) {
         </div>
 
         <div class="home-events">
-        <?php foreach($events as $event) : ?>
+          <?php foreach($events as $event) : ?>
             <div class="event">
               <h2><?php echo $event["title"]; ?></h2>
               <h5>Event At: <?php echo $event["event_at"]; ?></h5>
@@ -93,4 +92,4 @@ if (isset($_POST["submit"])) {
         </div>
       </div>
     </div>
-    <?php include("inc/footer.php"); ?>
+<?php include("inc/footer.php"); ?>

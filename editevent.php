@@ -4,32 +4,33 @@ require "inc/config.php";
 # Check for submit
 if (isset($_POST["submit"])) {
   # Get form data
-  $update_id = mysqli_real_escape_string($conn, $_POST["update_id"]);
-  $title = mysqli_real_escape_string($conn, $_POST["title"]);
-  $event_at = mysqli_real_escape_string($conn, $_POST["event_at"]);
-  $descr = mysqli_real_escape_string($conn, $_POST["descr"]);
+  $update_id = $conn -> real_escape_string(htmlspecialchars($_POST["update_id"]));
+  $title = $conn -> real_escape_string(htmlspecialchars($_POST["title"]));
+  $event_at = $conn -> real_escape_string(htmlspecialchars($_POST["event_at"]));
+  $descr = $conn -> real_escape_string(htmlspecialchars($_POST["descr"]));
 
-  $query = "UPDATE events SET title='$title', event_at='$event_at', descr='$descr' WHERE id = '{$update_id}' ";
+  # Create query
+  $sql = "UPDATE events SET title='$title', event_at='$event_at', descr='$descr' WHERE id = '$update_id' ";
 
-  if (mysqli_query($conn, $query)) {
+  # Redirect to home page if query successfull
+  if ($conn -> query($sql)) {
     header ("Location: home.php");
   } else {
     echo "ERROR: ".mysqli_error($conn);
   }
 }
 
-  # Using OOP
   # Get ID
- $id = mysqli_real_escape_string($conn, $_GET["id"]);
+  $id = $conn -> real_escape_string($_GET["id"]);
 
- # Create Query = SINLGE POST
- $sql2 = "SELECT * FROM events WHERE id = $id";
+  # Create Query = SINLGE POST
+  $sql = "SELECT * FROM events WHERE id = $id";
 
- # Get the result
- $result2 = $conn -> query($sql2);
+  # Get the result
+  $result = $conn -> query($sql);
 
- # Fetch data to associative array
- $event = mysqli_fetch_assoc($result2);
+  # Fetch data to associative array
+  $event = $result -> fetch_assoc();
 
     require "inc/event-query.php"; 
 ?>
@@ -76,13 +77,13 @@ if (isset($_POST["submit"])) {
 
             <!-- Hidden id shows this post ID -->
               <input type="hidden" name="update_id" value="<?php echo $event["id"]; ?>">
-              <input type="submit" name="submit" value="Edit post" class="btn-success">
+              <input type="submit" name="submit" value="Edit event" class="btn-success">
             </form>
           </div>
         </div>
 
         <div class="home-events">
-        <?php foreach($events as $event) : ?>
+          <?php foreach($events as $event) : ?>
             <div class="event">
               <h2><?php echo $event["title"]; ?></h2>
               <h5>Event At: <?php echo $event["event_at"]; ?></h5>
@@ -93,4 +94,4 @@ if (isset($_POST["submit"])) {
         </div>
       </div>
     </div>
-    <?php include("inc/footer.php"); ?>
+<?php include("inc/footer.php"); ?>

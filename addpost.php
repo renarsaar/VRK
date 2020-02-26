@@ -1,70 +1,83 @@
 <?php
 require "inc/config.php";
 
-?>
+# Check for submit
+if (isset($_POST["submit"])) {
+  # Get form data
+  $title = $conn -> real_escape_string(htmlspecialchars($_POST["title"]));
+  $body = $conn -> real_escape_string(htmlspecialchars($_POST["body"]));
+  $author = $conn -> real_escape_string(htmlspecialchars($_POST["author"]));
 
+  # Create query
+  $sql = "INSERT INTO posts(title, body, author) VALUES ('$title', '$body', '$author')";
+
+  # Redirect to home page if query successfull
+  if ($conn -> query($sql)) {
+    header ("Location: home.php");
+  } else {
+    echo "ERROR: ".mysqli_error($conn);
+  }
+}
+
+require "inc/event-query.php"; 
+?>
 <?php include("inc/home-header.php"); ?>
-    <div class="home-container">
-      <div class="header">
-        <div class="header-logo">
-          <a href="home.php">
-            <h1>VRK Intranet</h1>
-          </a>
-        </div>
-        <div class="header-menu">
-          <ul>
-            <li><a href="addpost.php" class="btn-menu">Add Post</a></li>
-            <li><a href="addevent.php" class="btn-menu">Add Event</a></li>
-            <li><a href="fileshare.php" class="btn-menu">File Sharing</a></li>
-            <li><a href="members.php" class="btn-menu">Members</a></li>
-            <a href="home.php"><i class="fas fa-home home-fas"></i></a>
-            <a href="logout.php"><i class="fas fa-sign-out-alt home-fas"></i></a>
-          </ul>
-        </div>
-      </div>
+<?php include("inc/navbar.php"); ?>
 
       <div class="home-content">
         <div class="home-posts">
-          <div class="post">
-            <!-- Foreach loop -->
-            <h2>Post Header</h2>
-            <h5>Created At: 2020-02-19 22:10:05 By: Renar Saaremets</h5>
-            <p class="txt-home">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio,
-              totam rem! Magni, voluptatibus itaque? Qui ut non vitae similique
-              perferendis cupiditate possimus. Odit, vel eaque! Neque deleniti
-              eveniet quos soluta!
-            </p>
-            <a class="btn btn-default" href="post.html">Read more</a>
-          </div>
-          <div class="post">
-            <!-- Foreach loop -->
-            <h2>Post Header</h2>
-            <h5>Created At: 2020-02-19 22:10:05 By: Renar Saaremets</h5>
-            <p class="txt-home">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Excepturi asperiores, architecto, blanditiis at impedit vel et
-              quod accusantium iure sed libero quasi nobis doloribus tempore
-              nemo. Laudantium illum minus id!
-            </p>
-            <a class="btn" href="post.html">Read more</a>
+          <div class="form">
+            <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" class="">
+              <h2>Add a new post</h2>
+              <!-- Input fields -->
+              <div class="input-field">
+                <h4>Post title</h4>
+                <label for="title">
+                  <input
+                    type="text"
+                    name="title"
+                    placeholder="Add title..."
+                  />
+                </label>
+              </div>
+              <div class="input-field">
+                <h4>Post author</h4>
+                <label for="author">
+                  <input
+                    type="text"
+                    name="author"
+                    placeholder="Add author..."
+                  />
+                </label>
+              </div>
+              <div class="input-field">
+                <h4>Post content</h4>
+                <label for="body">
+                  <textarea 
+                  name="body"
+                  rows="7"
+                  cols="60"
+                  placeholder="Add post content..."></textarea>
+                </label>
+              </div>
+
+              <input type="submit" name="submit" value="Add a new post" class="btn-success">
+            </form>
           </div>
         </div>
 
         <div class="home-events">
-          <div class="event">
-            <h2>Event Header</h2>
-            <h5>Event At: 2020-02-24 22:10:05</h5>
-            <p class="txt-home">Event paragraph/content</p>
-            <a class="btn" href="event.html">View more</a>
-          </div>
-          <div class="event">
-            <h2>Event Header</h2>
-            <h5>Event At: 2020-02-24 22:10:05</h5>
-            <p class="txt-home">Event paragraph/content</p>
-            <a class="btn btn-default" href="event.html">View more</a>
-          </div>
+
+        <div class="home-posts">
+          <?php foreach($events as $event) : ?>
+            <div class="event">
+              <h2><?php echo $event["title"]; ?></h2>
+              <h5>Event At: <?php echo $event["event_at"]; ?></h5>
+              <p class="txt-home"><?php echo $event["descr"]; ?></p>
+              <a class="btn" href="event.php?id=<?php echo $event["id"]; ?>">View more</a>
+            </div>
+          <?php endforeach; ?>
         </div>
       </div>
     </div>
-    <?php include("inc/footer.php"); ?>
+<?php include("inc/footer.php"); ?>

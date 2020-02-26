@@ -4,31 +4,31 @@ require "inc/config.php";
 # Check for submit
 if (isset($_POST["delete"])) {
   # Get form data
-  $delete_id = mysqli_real_escape_string($conn, $_POST["delete_id"]);
+  $delete_id = $conn -> real_escape_string($_POST["delete_id"]);
 
-  # Delete = delete_id (line 62)
-  $query = "DELETE FROM posts WHERE id = {$delete_id};";
+  # Create query
+  $sql = "DELETE FROM posts WHERE id = $delete_id;";
 
-  if (mysqli_query($conn, $query)) {
+  # Redirect to home page if query successfull
+  if ($conn -> query($sql)) {
     header ("Location: home.php");
   } else {
     echo "ERROR: ".mysqli_error($conn);
   }
 }
 
-
   # Using OOP
-
-  $id = mysqli_real_escape_string($conn, $_GET["id"]);
+  # Get ID
+  $id = $conn -> real_escape_string($_GET["id"]);
 
   # Create Query = SINLGE POST
-  $sql3 = "SELECT * FROM posts WHERE id = $id";
+  $sql = "SELECT * FROM posts WHERE id = $id";
 
   # Get the result
-  $result3 = $conn -> query($sql3);
+  $result = $conn -> query($sql);
 
   # Fetch data to associative array
-  $post = mysqli_fetch_assoc($result3);
+  $post = $result -> fetch_assoc();
 
     require "inc/event-query.php"; 
 ?>

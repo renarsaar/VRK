@@ -1,70 +1,101 @@
 <?php
-require "inc/config.php";
 
+  require "inc/config.php";
+
+  $msg = "";
+  $msgClass = "";
+  $target_dir = "uploads/";
+  $target_file = $target_dir . basename($_FILES["file"]["name"]);
+  $uploadOk = 1;
+  $fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+  # Check if image file is a actual image or fake image
+  if(isset($_POST["submit"])) {
+      $check = filesize($_FILES["file"]["tmp_name"]);
+      if($check !== false) {
+          $msgClass = "alert-success";
+          $msg = "File is a valid file - " . $check["mime"] . ".";
+          $uploadOk = 1;
+      } else {
+          $msgClass = "alert-danger";
+          $msg = "File is not a valid file.";
+          $uploadOk = 0;
+      }
+  }
+  # Check if file already exists
+  if (file_exists($target_file)) {
+      $msgClass = "alert-danger";
+      $msg = "Sorry, file already exists.";
+      $uploadOk = 0;
+  }
+  # Check file size
+  if ($_FILES["file"]["size"] > 50000000) {
+      $msgClass = "alert-danger";
+      $msg = "Sorry, your file is too large.";
+      $uploadOk = 0;
+  }
+  # Allow certain file formats
+  if($fileType != "jpg" && $fileType != "pdf" && $fileType != "png" && $fileType != "jpeg") {
+      $msgClass = "alert-danger";
+      $msg = "Sorry, only JPG, JPEG, PNG & PDF files are allowed.";
+      $uploadOk = 0;
+  }
+  # Check if $uploadOk is set to 0 by an error
+  if ($uploadOk == 0) {
+      $msgClass = "alert-danger";
+      $msg = "Sorry, your file was not uploaded.";
+  # if everything is ok, try to upload file
+  } else {
+      if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+          $msgClass = "alert-success";
+          $msg = "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
+      } else {
+          $msgClass = "alert-danger";
+          $msg = "Sorry, there was an error uploading your file.";
+      }
+  }
+
+require "inc/event-query.php";
 ?>
 
 <?php include("inc/home-header.php"); ?>
-    <div class="home-container">
-      <div class="header">
-        <div class="header-logo">
-          <a href="home.php">
-            <h1>VRK Intranet</h1>
-          </a>
-        </div>
-        <div class="header-menu">
-          <ul>
-            <li><a href="addpost.php" class="btn-menu">Add Post</a></li>
-            <li><a href="addevent.php" class="btn-menu">Add Event</a></li>
-            <li><a href="fileshare.php" class="btn-menu">File Sharing</a></li>
-            <li><a href="members.php" class="btn-menu">Members</a></li>
-            <a href="home.php"><i class="fas fa-home home-fas"></i></a>
-            <a href="logout.php"><i class="fas fa-sign-out-alt home-fas"></i></a>
-          </ul>
-        </div>
-      </div>
+<?php include("inc/navbar.php") ?>
 
       <div class="home-content">
         <div class="home-posts">
-          <div class="post">
-            <!-- Foreach loop -->
-            <h2>Post Header</h2>
-            <h5>Created At: 2020-02-19 22:10:05 By: Renar Saaremets</h5>
-            <p class="txt-home">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio,
-              totam rem! Magni, voluptatibus itaque? Qui ut non vitae similique
-              perferendis cupiditate possimus. Odit, vel eaque! Neque deleniti
-              eveniet quos soluta!
-            </p>
-            <a class="btn btn-default" href="post.html">Read more</a>
-          </div>
-          <div class="post">
-            <!-- Foreach loop -->
-            <h2>Post Header</h2>
-            <h5>Created At: 2020-02-19 22:10:05 By: Renar Saaremets</h5>
-            <p class="txt-home">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Excepturi asperiores, architecto, blanditiis at impedit vel et
-              quod accusantium iure sed libero quasi nobis doloribus tempore
-              nemo. Laudantium illum minus id!
-            </p>
-            <a class="btn" href="post.html">Read more</a>
+          <div class="form">
+           <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" enctype="multipart/form-data">
+              <h2>Upload a new file</h2>
+              <div class="input-field">
+                <h4>Add a file</h4>
+                  <input
+                    type="file"
+                    name="file"
+                    id="file"
+                  />
+                <input type="submit" name="submit" value="Upload a new file" class="btn-success">
+                  <!-- ERROR/SUCCESS MESSAGE -->
+                  <?php if($msg != ""): ?>
+                    <div class="<?php echo $msgClass; ?>"><?php echo $msg; ?></div>
+                  <?php endif; ?>
+              </div>
+            </form>
+            <div class="post">
+              <h2>Uploaded files</h2>
+            <p class="home-txt"><?php echo $_FILES["file"]["name"]; ?></p> 
+            </div>
           </div>
         </div>
 
         <div class="home-events">
-          <div class="event">
-            <h2>Event Header</h2>
-            <h5>Event At: 2020-02-24 22:10:05</h5>
-            <p class="txt-home">Event paragraph/content</p>
-            <a class="btn" href="event.html">View more</a>
-          </div>
-          <div class="event">
-            <h2>Event Header</h2>
-            <h5>Event At: 2020-02-24 22:10:05</h5>
-            <p class="txt-home">Event paragraph/content</p>
-            <a class="btn btn-default" href="event.html">View more</a>
-          </div>
+        <?php foreach($events as $event) : ?>
+            <div class="event">
+              <h2><?php echo $event["title"]; ?></h2>
+              <h5>Event At: <?php echo $event["event_at"]; ?></h5>
+              <p class="txt-home"><?php echo $event["descr"]; ?></p>
+              <a class="btn" href="event.php?id=<?php echo $event["id"]; ?>">View more</a>
+            </div>
+          <?php endforeach; ?>
         </div>
       </div>
     </div>
-    <?php include("inc/footer.php"); ?>
+<?php include("inc/footer.php"); ?>

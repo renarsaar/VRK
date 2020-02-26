@@ -10,15 +10,13 @@ require "inc/config.php";
   $result = $conn -> query($sql);
 
   # Fetch data to associative array
-  $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+  $posts = $result -> fetch_all(MYSQLI_ASSOC);
 
     require "inc/event-query.php";
 ?>
 
 <?php include("inc/home-header.php"); ?>
 <?php include("inc/navbar.php"); ?>
-    
-
       <div class="home-content">
         <div class="home-posts">
           <!-- Foreach loop -->
@@ -47,4 +45,4 @@ require "inc/config.php";
         </div>
       </div>
     </div>
-    <?php include("inc/footer.php"); ?>
+<?php include("inc/footer.php"); ?>

@@ -8,46 +8,39 @@ $msgClass = "";
 # If Submit login form
 if (isset($_POST["submit"])) {
   # Check if they match
-  $email = htmlspecialchars($_POST["email"]);
+  $username = htmlspecialchars($_POST["username"]);
   $pword = htmlspecialchars($_POST["pword"]);
   $isValid = true;
 
   # Check IF fields are empty
-  if (empty($email) || empty($pword)) {
+  if (empty($username) || empty($pword)) {
     $isValid = false;
     $msgClass = "alert-danger";
     $msg = "Please enter all fields!";
   }
 
-  # Check IF email is valid
-  if ($isValid && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $isValid = false;
-    $msgClass = "alert-danger";
-    $msg = "Please enter a valid E-mail address";
-  }
-
   # IsValid = Search for Email
   if ($isValid) {
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt -> bind_param("s", $email);
-    $stmt -> execute();
-    $result = $stmt -> get_result();
-    $stmt -> close();
+    $sql = $conn -> prepare("SELECT * FROM users WHERE username = ?");
+    $sql -> bind_param("s", $username);
+    $sql -> execute();
+    $result = $sql -> get_result();
+    $sql -> close();
     # If no rows exists = means that there are no emails found
     if($result -> num_rows == 0) {
       $isValid = false;
       $msgClass = "alert-danger";
-      $msg = "No user found with this Email";
+      $msg = "No user found with this Username";
     }
   }
 
   # IsValid = Login to Home Page
   if ($isValid) {
-    $stmt = $conn->prepare("SELECT email, pword FROM users WHERE email = ? AND pword = ?");
-    $stmt -> bind_param("ss", $email, $pword);
-    $stmt -> execute();
-    $result = $stmt -> get_result();
-    $stmt -> close();
+    $sql = $conn -> prepare("SELECT username, pword FROM users WHERE username = ? AND pword = ?");
+    $sql -> bind_param("ss", $username, $pword);
+    $sql -> execute();
+    $result = $sql -> get_result();
+    $sql -> close();
 
     # If match = redirect to home.php
     if($result -> num_rows > 0) {
@@ -55,7 +48,7 @@ if (isset($_POST["submit"])) {
     } else {
       $isValid = false;
       $msgClass = "alert-danger";
-      $msg = "Email and Password do not match";
+      $msg = "Username and Password do not match";
     }
   }
 }
@@ -80,13 +73,13 @@ if (isset($_POST["submit"])) {
 
               <form method="post" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
               <div class="input-field">
-                <i class="fas fa-envelope fields-i"></i>
+                <i class="fas fa-info fields-i"></i>
                 <input 
-                type="email" 
-                id="email" 
-                name="email"
-                placeholder="Enter Email" 
-                value="<?php echo isset($_POST["email"]) ? $email : ""; ?>"/>
+                type="text" 
+                id="username" 
+                name="username"
+                placeholder="Enter Username" 
+                value="<?php echo isset($_POST["username"]) ? $username : ""; ?>"/>
               </div>
               <div class="input-field">
                 <i class="fas fa-lock fields-i"></i>
@@ -122,4 +115,4 @@ if (isset($_POST["submit"])) {
         </div>
       </div>
     </section>
-  <?php include("inc/footer.php"); ?>
+<?php include("inc/footer.php"); ?>

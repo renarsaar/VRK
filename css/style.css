@@ -41,6 +41,24 @@ a {
   margin-bottom: 1rem;
 }
 
+.btn-alert {
+  background: var(--alert-color);
+  color: var(--light-color);
+  opacity: 0.8;
+  border-radius: 5px;
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.btn-success {
+  background: var(--success-color);
+  color: var(--light-color);
+  opacity: 0.8;
+  border-radius: 5px;
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 1rem;
+}
+
 .btn-menu {
   padding-bottom: 0.2rem;
 }
@@ -276,13 +294,13 @@ section #home {
   border-radius: 5px;
 }
 
-.home-container .home-content .home-posts .post {
+.home-container .home-content .home-posts .post-event {
   margin: 0.5rem 0;
   padding: 2rem 4rem;
   text-align: center;
 }
 
-.home-container .home-content .home-posts .post .edit-form {
+.home-container .home-content .home-posts .post-event .edit-form {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -297,4 +315,38 @@ section #home {
 .home-container .home-content .home-events .event {
   padding: 2rem 1.5rem;
   text-align: center;
+}
+
+/* HOME PAGE FORMS */
+.home-container .home-content .home-posts .form {
+  background: var(--medium-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  border-radius: 12px;
+}
+
+.home-container .home-content .home-posts .form {
+  background: var(--medium-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  border-radius: 12px;
+}
+
+/* FORM INPUT TYPES */
+.home-container .home-content .home-posts .form .input-field input[type="text"],
+input[type="date"],
+textarea {
+  color: var(--dark-color);
+  background: var(--light-color);
+  text-align: left;
+  margin: 0.6rem 0;
+  padding: 0.6rem 1rem 0.6rem 3.5rem;
+  border: none;
+  border-radius: 25px;
 }

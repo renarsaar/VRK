@@ -6,10 +6,11 @@ $msgClass = "";
 
 # Register a new User
 if(isset($_POST["submit"])) {
-  $username = htmlspecialchars(ucwords($_POST["username"]));
+  $username = htmlspecialchars($_POST["username"]);
   $email = htmlspecialchars($_POST["email"]);
   $pword = htmlspecialchars($_POST["pword"]);
   $confirm_pword = htmlspecialchars($_POST["confirm_pword"]);
+  // $hashed_pword = password_hash($pword, PASSWORD_DEFAULT);
   
   $isValid = true;
 
@@ -18,6 +19,11 @@ if(isset($_POST["submit"])) {
       $isValid = false;
       $msgClass = "alert-danger";
       $msg = "Please enter all fields!";
+    } elseif (strlen($pword) < 6) {
+      # Password atleast 6 characters
+      $isValid = false;
+      $msgClass = "alert-danger";
+      $msg = "Password must be atleast 6 characters";
     }
     
   # Check IF pword matches confirm_pword 
@@ -50,9 +56,10 @@ if(isset($_POST["submit"])) {
       }
     }
 
+    
   # isValid = True = Insert Records
     if ($isValid) {
-      $insertSQL = "INSERT INTO users(username, email, pword) VALUES (?, ?, ?, ?)";
+      $insertSQL = "INSERT INTO users(username, email, pword) VALUES (?, ?, ?)";
       $stmt = $conn -> prepare($insertSQL);
     # "s" = corresponding variable has type string
       $stmt -> bind_param("sss", $username, $email, $pword);
@@ -86,7 +93,7 @@ if(isset($_POST["submit"])) {
             <?php endif; ?>
 
             <!-- REGISTER -->
-            <form method="post" action="">
+            <form method="post" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
               <h2>Register a New User</h2>
               <div class="input-field">
                 <i class="fas fa-info fields-i"></i>
@@ -137,7 +144,7 @@ if(isset($_POST["submit"])) {
               </div>
             </form>
             <div class="help-field">
-              <a href="login.php"><p class="txt">Login Page</p></a>
+              <a href="index.php"><p class="txt">Login Page</p></a>
             </div>
           </div>
         </div>

@@ -1,69 +1,71 @@
 <?php
 require "inc/config.php";
 
+# Check for submit
+if (isset($_POST["delete"])) {
+  # Get form data
+  $delete_id = mysqli_real_escape_string($conn, $_POST["delete_id"]);
+
+  # Delete = delete_id (line 62)
+  $query = "DELETE FROM events WHERE id = {$delete_id};";
+
+  if (mysqli_query($conn, $query)) {
+    header ("Location: home.php");
+  } else {
+    echo "ERROR: ".mysqli_error($conn);
+  }
+}
+
+ # Using OOP
+ # Get ID
+ $id = mysqli_real_escape_string($conn, $_GET["id"]);
+
+ # Create Query = SINLGE POST
+ $sql2 = "SELECT * FROM events WHERE id = $id";
+
+ # Get the result
+ $result2 = $conn -> query($sql2);
+
+ # Fetch data to associative array
+ $event = mysqli_fetch_assoc($result2);
+
+require "inc/event-query.php";
 ?>
 
 <?php include("inc/home-header.php"); ?>
-    <div class="home-container">
-      <div class="header">
-        <div class="header-logo">
-          <a href="home.php">
-            <h1>VRK Intranet</h1>
-          </a>
-        </div>
-        <div class="header-menu">
-          <ul>
-            <li><a href="addpost.php" class="btn-menu">Add Post</a></li>
-            <li><a href="addevent.php" class="btn-menu">Add Event</a></li>
-            <li><a href="fileshare.php" class="btn-menu">File Sharing</a></li>
-            <li><a href="members.php" class="btn-menu">Members</a></li>
-            <a href="home.php"><i class="fas fa-home home-fas"></i></a>
-            <a href="logout.php"><i class="fas fa-sign-out-alt home-fas"></i></a>
-          </ul>
-        </div>
-      </div>
-
+<?php include("inc/navbar.php"); ?>
       <div class="home-content">
         <div class="home-posts">
-          <div class="post">
-            <!-- Foreach loop -->
-            <h2>Post Header</h2>
-            <h5>Created At: 2020-02-19 22:10:05 By: Renar Saaremets</h5>
+          <div class="post-event">
+            <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" class="">
+            <h2><?php echo $event["title"]; ?></h2>
+            <h5>Event At: <?php echo $event["event_at"]; ?></h5>
             <p class="txt-home">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio,
-              totam rem! Magni, voluptatibus itaque? Qui ut non vitae similique
-              perferendis cupiditate possimus. Odit, vel eaque! Neque deleniti
-              eveniet quos soluta!
+            <?php echo $event["descr"]; ?>
             </p>
-            <a class="btn btn-default" href="post.html">Read more</a>
-          </div>
-          <div class="post">
-            <!-- Foreach loop -->
-            <h2>Post Header</h2>
-            <h5>Created At: 2020-02-19 22:10:05 By: Renar Saaremets</h5>
-            <p class="txt-home">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Excepturi asperiores, architecto, blanditiis at impedit vel et
-              quod accusantium iure sed libero quasi nobis doloribus tempore
-              nemo. Laudantium illum minus id!
-            </p>
-            <a class="btn" href="post.html">Read more</a>
-          </div>
+
+
+
+
+              <!-- Hidden id shows this post ID -->
+              <input type="hidden" name="delete_id" value="<?php echo $event["id"]; ?>">
+                <div class="edit-form">
+                  <a href="editevent.php?id=<?php echo $event["id"]; ?>" class="btn">Edit Event</a>
+                  <input type="submit" name="delete" value="Delete" class="btn-alert">
+                </div>
+            </form>
+          </div>       
         </div>
 
         <div class="home-events">
+          <?php foreach($events as $event): ?>
           <div class="event">
-            <h2>Event Header</h2>
-            <h5>Event At: 2020-02-24 22:10:05</h5>
-            <p class="txt-home">Event paragraph/content</p>
-            <a class="btn" href="event.html">View more</a>
+            <h2><?php echo $event["title"]; ?></h2>
+            <h5>Event At: <?php echo $event["event_at"]; ?></h5>
+            <p class="txt-home"><?php echo $event["descr"]; ?></p>
+            <a class="btn" href="event.php?id=<?php echo $event["id"]; ?>">View more</a>
           </div>
-          <div class="event">
-            <h2>Event Header</h2>
-            <h5>Event At: 2020-02-24 22:10:05</h5>
-            <p class="txt-home">Event paragraph/content</p>
-            <a class="btn btn-default" href="event.html">View more</a>
-          </div>
+          <?php endforeach; ?>
         </div>
       </div>
     </div>

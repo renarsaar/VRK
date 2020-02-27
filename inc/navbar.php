@@ -1,9 +1,16 @@
 <div class="home-container">
       <div class="header">
         <div class="header-logo">
-          <a href="home.php">
-            <h1>VRK Intranet</h1>
-          </a>
+          <ul>
+            <li>
+              <a href="home.php">
+                <h1>VRK Intranet</h1>
+              </a> 
+            </li>
+            <li>
+              <h2>Hi, <?php echo $_SESSION["username"]; ?></h2>
+            </li>
+          </ul>
         </div>
         <div class="header-menu">
           <ul>

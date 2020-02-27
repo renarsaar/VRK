@@ -220,6 +220,11 @@ input[type="text"] {
   border-bottom: 4px solid var(--blue-color);
 }
 
+.home-container .header .header-logo ul li {
+  display: inline-block;
+  margin: 0 0.6rem;
+}
+
 .home-container .header .header-menu ul li {
   display: inline;
   margin: 0 0.6rem;

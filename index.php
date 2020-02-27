@@ -1,6 +1,7 @@
 <?php
 # Inc Config File
 require_once "inc/config.php";
+session_start();
 
 $msg = "";
 $msgClass = "";
@@ -44,6 +45,8 @@ if (isset($_POST["submit"])) {
 
     # If match = redirect to home.php
     if($result -> num_rows > 0) {
+      # Sessions
+      $_SESSION["username"] = $username;
       header('Location: home.php');
     } else {
       $isValid = false;

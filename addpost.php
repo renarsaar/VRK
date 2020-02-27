@@ -1,12 +1,13 @@
 <?php
 require "inc/config.php";
+session_start();
 
 # Check for submit
 if (isset($_POST["submit"])) {
   # Get form data
   $title = $conn -> real_escape_string(htmlspecialchars($_POST["title"]));
   $body = $conn -> real_escape_string(htmlspecialchars($_POST["body"]));
-  $author = $conn -> real_escape_string(htmlspecialchars($_POST["author"]));
+  $author = $conn -> real_escape_string(htmlspecialchars($_SESSION["username"]));
 
   # Create query
   $sql = "INSERT INTO posts(title, body, author) VALUES ('$title', '$body', '$author')";
@@ -41,16 +42,6 @@ require "inc/event-query.php";
                 </label>
               </div>
               <div class="input-field">
-                <h4>Post author</h4>
-                <label for="author">
-                  <input
-                    type="text"
-                    name="author"
-                    placeholder="Add author..."
-                  />
-                </label>
-              </div>
-              <div class="input-field">
                 <h4>Post content</h4>
                 <label for="body">
                   <textarea 
@@ -68,16 +59,7 @@ require "inc/event-query.php";
 
         <div class="home-events">
 
-        <div class="home-posts">
-          <?php foreach($events as $event) : ?>
-            <div class="event">
-              <h2><?php echo $event["title"]; ?></h2>
-              <h5>Event At: <?php echo $event["event_at"]; ?></h5>
-              <p class="txt-home"><?php echo $event["descr"]; ?></p>
-              <a class="btn" href="event.php?id=<?php echo $event["id"]; ?>">View more</a>
-            </div>
-          <?php endforeach; ?>
-        </div>
+        <?php include("inc/event-loop.php"); ?>
       </div>
     </div>
 <?php include("inc/footer.php"); ?>

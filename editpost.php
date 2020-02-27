@@ -1,5 +1,6 @@
 <?php
 require "inc/config.php";
+session_start();
 
 # Check for submit
 if (isset($_POST["submit"])) {
@@ -7,10 +8,9 @@ if (isset($_POST["submit"])) {
   $update_id = $conn -> real_escape_string(htmlspecialchars($_POST["update_id"]));
   $title = $conn -> real_escape_string(htmlspecialchars($_POST["title"]));
   $body = $conn -> real_escape_string(htmlspecialchars($_POST["body"]));
-  $author = $conn -> real_escape_string(htmlspecialchars($_POST["author"]));
 
   # Create query
-  $sql = "UPDATE posts SET title='$title', body='$body', author='$author' WHERE id = '$update_id' ";
+  $sql = "UPDATE posts SET title='$title', body='$body' WHERE id = '$update_id' ";
 
   # Redirect to home page if query successfull
   if ($conn -> query($sql)) {
@@ -54,16 +54,6 @@ if (isset($_POST["submit"])) {
                 </label>
               </div>
               <div class="input-field">
-                <h4>Author</h4>
-                <label for="postauthor">
-                  <input
-                    type="text"
-                    name="author"
-                    value="<?php echo $post["author"]; ?>"
-                  />
-                </label>
-              </div>
-              <div class="input-field">
                 <h4>Post</h4>
                 <label for="body">
                   <textarea 
@@ -80,16 +70,7 @@ if (isset($_POST["submit"])) {
           </div>
         </div>
 
-        <div class="home-events">
-          <?php foreach($events as $event) : ?>
-            <div class="event">
-              <h2><?php echo $event["title"]; ?></h2>
-              <h5>Event At: <?php echo $event["event_at"]; ?></h5>
-              <p class="txt-home"><?php echo $event["descr"]; ?></p>
-              <a class="btn" href="event.php?id=<?php echo $event["id"]; ?>">View more</a>
-            </div>
-          <?php endforeach; ?>
-        </div>
+        <?php include("inc/event-loop.php"); ?>
       </div>
     </div>
 <?php include("inc/footer.php"); ?>
